@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Component Design</title>
+  
+  <link rel="stylesheet" href="reveal/css/reveal.min.css">
+  <link rel="stylesheet" href="reveal/lib/css/googlecode.css">
+
+  <link rel="stylesheet" href="slides-theme/style.css">
+  <link rel="stylesheet" href="slides-theme/talk-specific.css">
+
+  <!-- demos -->
+
+  <!-- for live coding -->
+  <link rel="stylesheet" href="js/little-console.css" id="theme">
+
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-24335480-1']);
+  _gaq.push(['_trackPageview']);
+
+  var asyncScript = function(src) {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = src;
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  };
+
+  asyncScript(('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js');
+  </script>
+
+  <script src="js/revealHooks.js"></script>
+
+</head>
+
+<body>
+
+  <div class="reveal">
+    <div class="slides">
+<section  class=""><h2 id="creating-components">Creating Components</h2>
+</section>
+
+<section  class=""><h2 id="get-setup">Get setup</h2>
+<ul>
+<li><a href="https://www.github.com/timruffles/component-class">github.com/timruffles/component-class</a></li>
+</ul>
+</section>
+
+<section  class=""><h2 id="today">Today</h2>
+<blockquote>
+<p>Designing components for other people to use</p>
+</blockquote>
+</section>
+
+<section data-state='title' class=" title"><h2 id="what-makes-a-good-component">What makes a good component</h2>
+</section>
+
+<section  class=""><h2 id="let-s-take-a-look-at-some">Let&#39;s take a look at some</h2>
+</section>
+
+<section data-state='title' class=" title"><h2 id="design">Design</h2>
+</section>
+
+<section  class=""><h2 id="separating-concerns">Separating concerns</h2>
+</section>
+
+<section  class=""><h2 id="is-this-good-">Is this good?</h2>
+<pre><code class="lang-javascript">component({
+  jsonUrl: &quot;some/json.json&quot;,
+})
+</code></pre>
+</section>
+
+<section  class=""><h2 id="what-does-it-prevent-">What does it prevent?</h2>
+</section>
+
+<section  class=""><h2 id="better">Better</h2>
+<pre><code class="lang-javascript">component({
+  data: aPromiseForData,
+})
+</code></pre>
+</section>
+
+<section  class=""><h2 id="doing-too-much-is-bad">Doing too much is bad</h2>
+<ul>
+<li>relevent to a smaller set of problems</li>
+</ul>
+</section>
+
+<section data-state='title' class=" title"><h2 id="build-tools">Build tools</h2>
+</section>
+
+<section  class=""><h2 id="modules">Modules</h2>
+<ul>
+<li>still not native</li>
+</ul>
+</section>
+
+<section  class=""><h2 id="frontend-build">Frontend build</h2>
+<ul>
+<li>combine modules to single file</li>
+<li>minify to reduce size</li>
+<li>Source Maps to retain debuggability</li>
+</ul>
+</section>
+
+<section  class=""><h2 id="backend-build">Backend build</h2>
+<ul>
+<li>simply transpile</li>
+</ul>
+</section>
+
+<section  class=""><h2 id="babel">Babel</h2>
+<ul>
+<li>most popular, big community</li>
+<li>other options: Traceur, Closure</li>
+</ul>
+</section>
+
+<section  class=""><h2 id="transpiler">Transpiler</h2>
+<ul>
+<li>converts from ES6 code to ES5</li>
+<li>plugin architecture: opt in</li>
+</ul>
+<!-- TODO nice image -->
+</section>
+
+<section  class=""><h2 id="fewest-plugins-as-possible">Fewest plugins as possible</h2>
+<ul>
+<li>faster transpilation</li>
+<li>faster code!</li>
+</ul>
+</section>
+
+<section data-state='notitle' class=" notitle"><h2 id="-"> </h2>
+<pre><code class="lang-javascript">function x([a,b]) {
+  return (...args) =&gt; args.map(x =&gt; x + a + b);
+}
+</code></pre>
+<p>vs</p>
+<pre><code class="lang-javascript">&quot;use strict&quot;;
+
+var _slicedToArray = function () { /* 0.7kb of JS... */ }
+
+function x(_ref) {
+  var _ref2 = _slicedToArray(_ref, 2);
+
+  var a = _ref2[0];
+  var b = _ref2[1];
+
+  return function () {
+    for (var _len = arguments.length, args = Array(_len),
+       _key = 0; _key &lt; _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return args.map(function (x) {
+      return x + a + b;
+    });
+  };
+}
+</code></pre>
+</section>
+
+<section  class=""><h2 id="e-g">e.g</h2>
+<ul>
+<li>Node 5 passes 56% of ES6 test suite, so:</li>
+</ul>
+<pre><code class="lang-sh">&gt; node -v
+5.5.0
+&gt; npm install --save babel-preset-node5
+</code></pre>
+</section>
+
+<section data-state='title' class=" title"><h2 id="biojs">BioJS</h2>
+</section>
+
+<section  class=""><h2 id="a-repository">A repository</h2>
+</section>
+
+<section  class=""><h2 id="guidelines-on-good-design">Guidelines on good design</h2>
+</section>
+
+<section  class=""><h2 id="let-s-take-a-look">Let&#39;s take a look</h2>
+</section>
+
+<section data-state='title' class=" title"><h2 id="web-components">Web Components</h2>
+</section>
+
+<section  class=""><h2 id="custom-html">Custom HTML</h2>
+<pre><code class="lang-html">  &lt;spark-line
+    points=&quot;0.1 0.2 0.5 1 0.4 0.2 0.3&quot;
+    width=100
+    height=30
+    &gt;
+  &lt;/spark-line&gt;.
+</code></pre>
+</section>
+
+<section  class=""><h2 id="how-">How?</h2>
+</section>
+
+<section  class=""><h2 id="more-javascript-">More Javascript!</h2>
+</section>
+
+<section  class=""><h2 id="multiple-technologies">Multiple technologies</h2>
+<ul>
+<li>custom elements (&#39;public API&#39;)</li>
+<li>shadow DOM</li>
+<li>imports</li>
+</ul>
+</section>
+
+<section  class=""><h2 id="custom-elements-is-almost-ready">Custom elements is almost ready</h2>
+<ul>
+<li>the rest are still stuck in vendor conflict</li>
+</ul>
+</section>
+
+<section  class=""><h2 id="today">Today</h2>
+<ul>
+<li>custom elements (&#39;public API&#39;)</li>
+<li><del>shadow DOM</del></li>
+<li><del>imports</del></li>
+</ul>
+</section>
+
+<section data-state='title' class=" title"><h2 id="creating-a-custom-element">Creating a custom element</h2>
+</section>
+
+<section  class=""><h2 id="api">API</h2>
+<pre><code class="lang-javascript">const helloWorld = Object.create(HTMLElement.prototype);
+
+helloWorld.createdCallback = function() {
+  this.style.color = &quot;red&quot;;
+  this.innerHTML = &quot;Hello!&quot;
+}
+
+// note: <code>registerElement</code> may change name, concept
+// the same
+document.registerElement(&quot;hello-world&quot;, {
+  prototype: helloWorld,
+});
+</code></pre>
+<pre><code class="lang-html">// this HTML will visually appear like the below
+&lt;hello-world&gt;&lt;/hello-world&gt;
+</code></pre>
+<p><span style="color: red">
+  Hello!
+</span></p>
+</section>
+
+<section  class=""><h2 id="inherit-behaviour">Inherit behaviour</h2>
+<ul>
+<li>custom els must inherit from HTMLElement</li>
+</ul>
+<pre><code class="lang-javascript">const helloWorld = Object.create(HTMLElement.prototype);
+</code></pre>
+</section>
+
+<section  class=""><h2 id="callbacks">Callbacks</h2>
+<pre><code class="lang-javascript">helloWorld.createdCallback = function() {
+  this.style.color = &quot;red&quot;;
+  this.innerHTML = &quot;Hello!&quot;
+}
+</code></pre>
+</section>
+
+<section  class=""><h2 id="registration">Registration</h2>
+<pre><code class="lang-javascript">// note: <code>registerElement</code> may change name, concept
+// the same
+document.registerElement(&quot;hello-world&quot;, {
+  prototype: helloWorld,
+});
+</code></pre>
+</section>
+
+<section  class=""><h2 id="using">Using</h2>
+<pre><code class="lang-html">// this HTML will visually appear like the below
+&lt;hello-world&gt;&lt;/hello-world&gt;
+</code></pre>
+</section>
+
+<section  class=""><h2 id="let-s-try">Let&#39;s try</h2>
+<pre><code>exercises/custom-element
+</code></pre></section>
+
+<section data-state='title' class=" title"><h2 id="complete-lifecycle">Complete lifecycle</h2>
+</section>
+
+<section  class=""><h2 id="createdcallback">createdCallback</h2>
+<ul>
+<li>like a constructor</li>
+</ul>
+<pre><code class="lang-javascript">helloWorld.createdCallback = function() {
+  this.style.color = &quot;red&quot;;
+  this.innerHTML = &quot;Hello!&quot;
+}
+</code></pre>
+</section>
+
+<section  class=""><h2 id="attachedcallback">attachedCallback</h2>
+<ul>
+<li>when node is inserted into document</li>
+<li>this is point it will be visible to people</li>
+</ul>
+<pre><code class="lang-javascript">sparkline.attachedCallback = function() {
+  this._prepareForDisplay();
+}
+</code></pre>
+</section>
+
+<section  class=""><h2 id="detachedcallback">detachedCallback</h2>
+<ul>
+<li>when node is removed</li>
+<li>stop any expensive work that&#39;s no longer required</li>
+</ul>
+<pre><code class="lang-javascript">sparkline.detachedCallback() = function() {
+  this._stopDisplayRelatedWork();
+}
+</code></pre>
+</section>
+
+<section  class=""><h2 id="attributechangedcallback">attributeChangedCallback</h2>
+<ul>
+<li>when an attribute changes</li>
+</ul>
+<pre><code class="lang-javascript">sparkline.attributeChangedCallback(name, oldVal, newVal) = function() {
+  // handle the attribute
+}
+</code></pre>
+</section>
+
+<section  class=""><h2 id="attribute-handling">Attribute handling</h2>
+<ul>
+<li>we get string values</li>
+<li>so lots of parsing required</li>
+</ul>
+</section>
+
+<section  class=""><h2 id="parsing">Parsing</h2>
+<pre><code class="lang-javascript">sparkline.attributeChangedCallback(name, oldVal, newVal) = function() {
+  this[name] = newVal;
+}
+
+Object.defineProperty(sparkline, &quot;width&quot;, {
+  set(width) {
+    this._width = typeof width === &#39;string&#39; ? parseInt(width) : Number(width);
+  },
+  get() {
+    return this._width;
+  }
+})
+</code></pre>
+</section>
+
+<section  class=""><h2 id="let-s-try">Let&#39;s try</h2>
+<pre><code>exercise/custom-element
+</code></pre></section>
+
+</div>
+</div>
+
+<!-- demo code -->
+<script src="js/jquery.js"></script>
+<script src="js/lodash.js"></script>
+<script src="js/angular.js"></script>
+
+<!-- live coding -->
+<script src=js/little-console.js></script>
+<script src=js/showConsoles.js></script>
+
+<!-- reveal -->
+<script src="reveal/lib/js/head.min.js"></script>
+<script src="reveal/plugin/highlight/highlight.js"></script>
+<script src="reveal/js/reveal.js"></script>
+<script src="js/revealConfig.js"></script>
+
+</body>

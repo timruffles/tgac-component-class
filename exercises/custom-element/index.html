@@ -1,0 +1,41 @@
+<!doctype html>
+<head>
+  <meta charset=utf-8>
+  <title>A minimal web-component</title>
+
+  <style>
+    body {
+      margin: 2em;
+      font-family: sans-serif;
+    }
+    
+  </style>
+
+  <script src="node_modules/webcomponents.js/CustomElements.js"></script>
+</head>
+
+<p>
+  It can be nice to use a sparkline to illustrate text. Here's a reader's heart rate when they a sparkline in a document:
+  <spark-line
+    points="0.1 0.2 0.5 1 0.4 0.2 0.3"
+    width=100
+    height=30
+    >
+  </spark-line>.
+</p>
+
+<p>
+  Reusing a sparkline component is easy! Designers and content authors can easily insert them via HTML syntax. We observe this productivity cure:
+  <spark-line
+    points="0.1 0.15 0.2 0.25 0.4 0.8 1"
+    width=100
+    height=30
+    color="blue"
+    >
+  </spark-line>. As you can see, Web Components pay for themselves!
+</p>
+
+
+
+<script src="node_modules/d3/d3.js"></script>
+<script src="exercise.js"></script>
