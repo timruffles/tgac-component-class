@@ -24,7 +24,7 @@ module.exports.render = function({
     .x((d) => xScale(d.x))
     .y(function(point) {
       return yScale(point.y);
-    })
+    });
 
   const lines = [
     points
@@ -50,6 +50,27 @@ module.exports.render = function({
           fill: "none",
           stroke: color,
         })
+
+  const updatePoint = d3.select(el)
+    .select("svg")
+    .selectAll("circle")
+    .data(points)
+
+  const enterPoint = updatePoint
+    .enter()
+    .append("circle")
+    .attr("r", width / 50)
+    .attr("fill", "red")
+
+  updatePoint.attr("cx", (d) => xScale(d.x))
+             .attr("cy", (d) => yScale(d.y))
+             .attr("title", (d) => {
+               return "you clicked: " + JSON.stringify(d);
+             })
+             .on("click", (d) => {
+               alert("you clicked: " + JSON.stringify(d));
+             })
+        
 };
 
 

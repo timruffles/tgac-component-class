@@ -15,6 +15,10 @@ class Sparkline extends HTMLElement {
     this[name] = current;
   }
 
+  consumeDataset(dataset) {
+    alert("thanks " + JSON.stringify(dataset, null, 4));
+  }
+
   // this.points = ...
   set points(string = "") {
     const values = string.split(" ")
