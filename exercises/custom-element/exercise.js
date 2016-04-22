@@ -2,7 +2,7 @@ const sparklineVis = require("./sparkline");
 
 class Sparkline extends HTMLElement {
   createdCallback() {
-    this._observed = ["width", "height", "color", "points"];
+    this._observed = ["width", "height", "color"];
     this.style.display = "inline-block";
   }
 
@@ -23,13 +23,25 @@ class Sparkline extends HTMLElement {
   set points(string = "") {
     const values = string.split(" ")
       .map(s => parseFloat(s));
-    this._points = values;
+
+    const points = this._points.map(function(y, i) {
+      return { y, x: i };
+    });
+    this._points = points;
   }
 
   // const  = this.points;
   // document.querySelector("spark-line").points
   get points() {
     return this._points;
+  }
+
+  set data(data) {
+    return Promise.resolve(data)
+      .then((points) => {
+        this._points = points;
+        this._render();
+      })
   }
 
   set color(v) {
@@ -43,17 +55,12 @@ class Sparkline extends HTMLElement {
   }
 
   _render() {
-
-    const points = this._points.map(function(y, i) {
-      return { y, x: i };
-    });
-
     sparklineVis.render({
       el: this,
       width: this._width,
       height: this._height,
       color: this._color,
-      points: points,
+      points: this._points,
     })
   }
 }

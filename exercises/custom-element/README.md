@@ -28,3 +28,21 @@ Data is provided via a data setter. It accepts promises or existing data, so reg
 document.querySelector("spark-line")
 	.data = $.getJSON("./some/spark/data.json");
 ```
+
+## JS API
+
+```javascript
+const sparkline = require("sparkline");
+
+sparkline.render({
+  el: $("#some-id")[0],
+  width: 200,
+  height: 30,
+  points: [
+    { month: "jan", price: 157.2 },
+    { month: "feb", price: 157.2 },
+  ],
+  x: (d) => monthToInt(d.month),
+  y: (d) => d.price,
+});
+```

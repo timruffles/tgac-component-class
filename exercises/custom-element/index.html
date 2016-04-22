@@ -17,7 +17,6 @@
 <p>
   It can be nice to use a sparkline to illustrate text. Here's a reader's heart rate when they a sparkline in a document:
   <spark-line
-    points="0.1 0.2 0.5 1 0.4 0.2 0.3"
     width=100
     height=30
     color=red
@@ -31,11 +30,32 @@
     width=100
     height=30
     color="blue"
-    points="0.1 0.2 0.5 1 0.4 0.2 0.3"
     >
   </spark-line>. As you can see, Web Components pay for themselves!
 </p>
 
 
-
 <script src="dist.js"></script>
+
+<script>
+const funnyJson = fetch("https://www.reddit.com/r/funny.json");
+
+const data = funnyJson
+  .then((response) => response.json())
+  .then(({data: { children }}) => children)
+  .then((children) => {
+    return children.map(({ data: {score, created_utc: timestamp } }) => {
+      return { y: score, x: timestamp };
+    })
+  });
+
+data.then((d) => console.log(d));
+
+const els = Array.from(document.querySelectorAll("spark-line"))
+
+for(const el of els) {
+  el.data = data;
+}
+  
+</script>
+
