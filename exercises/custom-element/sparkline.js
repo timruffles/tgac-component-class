@@ -7,35 +7,49 @@ module.exports.render = function({
   color = "black",
   points = [],  
 }) {
-  // TODO remove stub
-  points = [{x:10, y: 20}, {x:20, y: 25}, {x: 80, y: 95}];
+
+
+  const X_PADDING = 2;
+
+  const xScale = d3.scale.linear()
+    .range([X_PADDING, width - X_PADDING])
+    .domain(d3.extent(points, (d) => d.x))
+
+  const yScale = d3.scale.linear()
+    .range([height - 2, 2])
+    .domain(d3.extent(points, (d) => d.y))
 
   // function makeLine(points: Array<{x: number, y: number}>): svgPathString {}
   const makeLine = d3.svg.line()
-    .x(({x}) => x)
-    .y(({y}) => y)
-  
+    .x((d) => xScale(d.x))
+    .y(function(point) {
+      return yScale(point.y);
+    })
+
+  const lines = [
+    points
+  ];
 
   const update = d3.select(el)
     .selectAll("svg")
-    .data([points])
+    .data(lines)
 
   update.enter()
     .append("svg")
     .append("path")
 
+    
   // update + enter
-  update.select("svg")
-        .attr({ width: width, height })
-  
+  update
+    .attr("width", width + "px")  
+    .attr("height", height + "px")  
+
   update.select("path")
         .attr("d", makeLine)
         .attr({
           fill: "none",
           stroke: color,
         })
-
-
 };
 
 

@@ -3,6 +3,7 @@ const sparklineVis = require("./sparkline");
 class Sparkline extends HTMLElement {
   createdCallback() {
     this._observed = ["width", "height", "color", "points"];
+    this.style.display = "inline-block";
   }
 
   attachedCallback() {
@@ -15,7 +16,7 @@ class Sparkline extends HTMLElement {
   }
 
   // this.points = ...
-  set points(string) {
+  set points(string = "") {
     const values = string.split(" ")
       .map(s => parseFloat(s));
     this._points = values;
@@ -27,6 +28,10 @@ class Sparkline extends HTMLElement {
     return this._points;
   }
 
+  set color(v) {
+    this._color = v || "black";
+  }
+
   _takeAllAttributes() {
     for(const attribute of this._observed) {
       this[attribute] = this.getAttribute(attribute);
@@ -34,12 +39,17 @@ class Sparkline extends HTMLElement {
   }
 
   _render() {
+
+    const points = this._points.map(function(y, i) {
+      return { y, x: i };
+    });
+
     sparklineVis.render({
       el: this,
       width: this._width,
       height: this._height,
       color: this._color,
-      points: this._points,
+      points: points,
     })
   }
 }
