@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Advanced JS class</title>
+  <title>Component Design</title>
   
   <link rel="stylesheet" href="reveal/css/reveal.min.css">
   <link rel="stylesheet" href="reveal/lib/css/googlecode.css">
@@ -250,6 +250,114 @@ document.registerElement(&quot;hello-world&quot;, {
   Hello!
 </span></p>
 </section>
+
+<section  class=""><h2 id="inherit-behaviour">Inherit behaviour</h2>
+<ul>
+<li>custom els must inherit from HTMLElement</li>
+</ul>
+<pre><code class="lang-javascript">const helloWorld = Object.create(HTMLElement.prototype);
+</code></pre>
+</section>
+
+<section  class=""><h2 id="callbacks">Callbacks</h2>
+<pre><code class="lang-javascript">helloWorld.createdCallback = function() {
+  this.style.color = &quot;red&quot;;
+  this.innerHTML = &quot;Hello!&quot;
+}
+</code></pre>
+</section>
+
+<section  class=""><h2 id="registration">Registration</h2>
+<pre><code class="lang-javascript">// note: <code>registerElement</code> may change name, concept
+// the same
+document.registerElement(&quot;hello-world&quot;, {
+  prototype: helloWorld,
+});
+</code></pre>
+</section>
+
+<section  class=""><h2 id="using">Using</h2>
+<pre><code class="lang-html">// this HTML will visually appear like the below
+&lt;hello-world&gt;&lt;/hello-world&gt;
+</code></pre>
+</section>
+
+<section  class=""><h2 id="let-s-try">Let&#39;s try</h2>
+<pre><code>exercises/custom-element
+</code></pre></section>
+
+<section data-state='title' class=" title"><h2 id="complete-lifecycle">Complete lifecycle</h2>
+</section>
+
+<section  class=""><h2 id="createdcallback">createdCallback</h2>
+<ul>
+<li>like a constructor</li>
+</ul>
+<pre><code class="lang-javascript">helloWorld.createdCallback = function() {
+  this.style.color = &quot;red&quot;;
+  this.innerHTML = &quot;Hello!&quot;
+}
+</code></pre>
+</section>
+
+<section  class=""><h2 id="attachedcallback">attachedCallback</h2>
+<ul>
+<li>when node is inserted into document</li>
+<li>this is point it will be visible to people</li>
+</ul>
+<pre><code class="lang-javascript">sparkline.attachedCallback = function() {
+  this._prepareForDisplay();
+}
+</code></pre>
+</section>
+
+<section  class=""><h2 id="detachedcallback">detachedCallback</h2>
+<ul>
+<li>when node is removed</li>
+<li>stop any expensive work that&#39;s no longer required</li>
+</ul>
+<pre><code class="lang-javascript">sparkline.detachedCallback() = function() {
+  this._stopDisplayRelatedWork();
+}
+</code></pre>
+</section>
+
+<section  class=""><h2 id="attributechangedcallback">attributeChangedCallback</h2>
+<ul>
+<li>when an attribute changes</li>
+</ul>
+<pre><code class="lang-javascript">sparkline.attributeChangedCallback(name, oldVal, newVal) = function() {
+  // handle the attribute
+}
+</code></pre>
+</section>
+
+<section  class=""><h2 id="attribute-handling">Attribute handling</h2>
+<ul>
+<li>we get string values</li>
+<li>so lots of parsing required</li>
+</ul>
+</section>
+
+<section  class=""><h2 id="parsing">Parsing</h2>
+<pre><code class="lang-javascript">sparkline.attributeChangedCallback(name, oldVal, newVal) = function() {
+  this[name] = newVal;
+}
+
+Object.defineProperty(sparkline, &quot;width&quot;, {
+  set(width) {
+    this._width = typeof width === &#39;string&#39; ? parseInt(width) : Number(width);
+  },
+  get() {
+    return this._width;
+  }
+})
+</code></pre>
+</section>
+
+<section  class=""><h2 id="let-s-try">Let&#39;s try</h2>
+<pre><code>exercise/custom-element
+</code></pre></section>
 
 </div>
 </div>
