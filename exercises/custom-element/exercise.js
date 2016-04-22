@@ -34,7 +34,13 @@ class Sparkline extends HTMLElement {
   }
 
   _render() {
-    this.innerHTML = this.points.join(", ");
+    sparklineVis.render({
+      el: this,
+      width: this._width,
+      height: this._height,
+      color: this._color,
+      points: this._points,
+    })
   }
 }
 
