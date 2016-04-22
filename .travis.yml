@@ -1,0 +1,13 @@
+sudo: false
+language: node_js
+os:
+- osx
+- linux
+node_js:
+- 5.5.0
+- 4.2.0
+script:
+- npm run ci
+cache:
+  directories:
+  - $HOME/.npm
